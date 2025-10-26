@@ -4,11 +4,14 @@ import os
 import uuid
 
 # Add utils to path for API import
-sys.path.append(os.path.dirname(__file__))
+current_dir = os.path.dirname(__file__)
+sys.path.append(current_dir)
+sys.path.append(os.path.join(current_dir, 'utils'))
 try:
     from utils.api import api
     api_available = True
-except ImportError:
+except ImportError as e:
+    st.error(f"Import error: {str(e)}")
     api_available = False
     api = None
 

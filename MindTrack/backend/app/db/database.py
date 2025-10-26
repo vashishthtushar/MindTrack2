@@ -26,7 +26,13 @@ Environment:
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./mindtrack.db")
 
 # If using SQLite, disable same-thread check (required for SQLite + multithreaded frameworks)
-connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
+# For PostgreSQL, ensure SSL mode is properly set
+connect_args = {}
+if DATABASE_URL.startswith("sqlite"):
+    connect_args["check_same_thread"] = False
+elif DATABASE_URL.startswith("postgresql"):
+    # Railway provides PostgreSQL URLs with SSL enabled
+    connect_args["sslmode"] = "require"
 
 # Create engine
 engine = create_engine(DATABASE_URL, connect_args=connect_args, pool_pre_ping=True)

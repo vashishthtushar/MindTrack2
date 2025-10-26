@@ -7,9 +7,10 @@ from typing import Dict, List, Any, Optional
 from datetime import date
 
 class MindTrackAPI:
-    def __init__(self, base_url: str = "http://localhost:8000"):
+    def __init__(self, base_url: str = None):
         """Initialize API client with base URL"""
-        self.base_url = base_url
+        import streamlit as st
+        self.base_url = base_url or st.secrets.get("api_url", "http://localhost:8000")
         self.session = requests.Session()
     
     def _request(self, method: str, endpoint: str, **kwargs) -> Dict[str, Any]:

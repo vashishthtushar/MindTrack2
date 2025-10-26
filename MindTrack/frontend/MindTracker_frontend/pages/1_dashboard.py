@@ -76,6 +76,10 @@ if current_streak in milestones:
 # Load habits from backend or session state
 def load_user_habits():
     """Load user's habits from backend or session state"""
+    # Prefer explicit saved_habits set by Home page after save
+    saved = st.session_state.get("saved_habits")
+    if saved:
+        return saved
     if api and st.session_state.user_id:
         try:
             # Try to get habits from backend
@@ -114,6 +118,45 @@ st.divider()
 # Main content
 subheader = st.subheader(f"📅 {today}")
 
+
+def get_saved_habits_details():
+    """Return list of dicts: {habit_name, last_date, last_status} by querying backend or session saved list."""
+    details = []
+    # Try backend first
+    if api and st.session_state.user_id:
+        try:
+            raw = api.get_user_habits(st.session_state.user_id)
+            if isinstance(raw, list) and raw:
+                # group by habit_name
+                by_name = {}
+                for e in raw:
+                    name = e.get("habit_name")
+                    if not name:
+                        continue
+                    d = e.get("date") or e.get("timestamp")
+                    status = e.get("status")
+                    # keep latest by date/timestamp
+                    if name not in by_name:
+                        by_name[name] = {"date": d, "status": status}
+                    else:
+                        try:
+                            # compare ISO date strings
+                            if d and by_name[name].get("date") and d > by_name[name]["date"]:
+                                by_name[name] = {"date": d, "status": status}
+                        except Exception:
+                            pass
+                for name, v in by_name.items():
+                    details.append({"habit_name": name, "last_date": v.get("date"), "last_status": v.get("status")})
+                return details
+        except Exception:
+            pass
+
+    # Fallback to session saved_habits (names only)
+    saved = st.session_state.get("saved_habits") or st.session_state.get("selected_habits") or []
+    for name in saved:
+        details.append({"habit_name": name, "last_date": None, "last_status": None})
+    return details
+
 # Check if we have habits
 if not user_habits:
     st.warning("⚠️ No habits found. Please go back to Home and select habits first.")
@@ -148,6 +191,24 @@ st.markdown("---")
 # Habit tracking section
 st.markdown("### 🎯 Track Your Habits")
 
+# Sidebar / right-column: Saved habits summary
+with st.container():
+    saved_details = get_saved_habits_details()
+    if saved_details:
+        st.markdown("**💾 Saved Habits (summary)**")
+        for d in saved_details:
+            name = d.get("habit_name")
+            last_date = d.get("last_date")
+            last_status = d.get("last_status")
+            line = f"- **{name}**"
+            if last_status:
+                line += f" — {str(last_status).capitalize()}"
+            if last_date:
+                line += f" ({last_date})"
+            st.markdown(line)
+    else:
+        st.info("No saved habits yet. Save on Home to persist them.")
+
 for idx, habit in enumerate(user_habits):
     st.markdown(f'<div class="habit-item"><strong>📌 {habit}</strong></div>', unsafe_allow_html=True)
     
@@ -171,6 +232,13 @@ for idx, habit in enumerate(user_habits):
                             notes="Completed via dashboard",
                             mood=5.0,
                         )
+                        # mark as saved in session so UI updates immediately
+                        try:
+                            existing = set(st.session_state.get("saved_habits") or [])
+                            existing.add(habit)
+                            st.session_state.saved_habits = list(existing)
+                        except Exception:
+                            st.session_state.saved_habits = [habit]
                     except Exception as e:
                         st.warning(f"Could not save to backend: {e}")
                 except Exception as e:
@@ -194,6 +262,12 @@ for idx, habit in enumerate(user_habits):
                             notes="Partially completed via dashboard",
                             mood=3.0,
                         )
+                        try:
+                            existing = set(st.session_state.get("saved_habits") or [])
+                            existing.add(habit)
+                            st.session_state.saved_habits = list(existing)
+                        except Exception:
+                            st.session_state.saved_habits = [habit]
                     except Exception as e:
                         st.warning(f"Could not save to backend: {e}")
                 except Exception as e:
@@ -217,6 +291,12 @@ for idx, habit in enumerate(user_habits):
                             notes="Missed via dashboard",
                             mood=1.0,
                         )
+                        try:
+                            existing = set(st.session_state.get("saved_habits") or [])
+                            existing.add(habit)
+                            st.session_state.saved_habits = list(existing)
+                        except Exception:
+                            st.session_state.saved_habits = [habit]
                     except Exception as e:
                         st.warning(f"Could not save to backend: {e}")
                 except Exception as e:
@@ -282,6 +362,13 @@ with col2:
                     st.session_state.last_save_errors = errors
                 else:
                     st.success("✅ Progress saved successfully!")
+                    # Update session saved_habits so Home and this Dashboard reflect persisted habits
+                    try:
+                        existing = set(st.session_state.get("saved_habits") or [])
+                        existing.update(user_habits)
+                        st.session_state.saved_habits = list(existing)
+                    except Exception:
+                        st.session_state.saved_habits = list(user_habits)
                     # Refresh UI so dashboard reflects new entries
                     st.experimental_rerun()
             except Exception as e:

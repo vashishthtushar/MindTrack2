@@ -1,0 +1,146 @@
+{
+    "users": [
+        {
+            "id": "u001",
+            "name": "Sweta",
+            "email": "sweta@example.com",
+            "createdAt": "2025-10-01T08:00:00Z"
+        },
+        {
+            "id": "u002",
+            "name": "Raj",
+            "email": "raj@example.com",
+            "createdAt": "2025-10-02T09:00:00Z"
+        }
+    ],
+    "habits": [
+        {
+            "id": "h001",
+            "userId": "u001",
+            "title": "Drink Water",
+            "description": "Aim for 8 glasses",
+            "frequency": "daily",
+            "createdAt": "2025-10-01T08:10:00Z"
+        },
+        {
+            "id": "h002",
+            "userId": "u001",
+            "title": "Meditate",
+            "description": "10 minutes mindfulness",
+            "frequency": "daily",
+            "createdAt": "2025-10-02T07:30:00Z"
+        },
+        {
+            "id": "h003",
+            "userId": "u002",
+            "title": "Run",
+            "description": "20 minute jog",
+            "frequency": "daily",
+            "createdAt": "2025-10-03T06:45:00Z"
+        },
+        {
+            "id": "h004",
+            "userId": "u002",
+            "title": "Read",
+            "description": "Read 15 pages",
+            "frequency": "daily",
+            "createdAt": "2025-10-04T20:00:00Z"
+        }
+    ],
+    "habitEntries": [
+        {
+            "id": "e001",
+            "habitId": "h001",
+            "userId": "u001",
+            "date": "2025-10-20",
+            "completed": true
+        },
+        {
+            "id": "e002",
+            "habitId": "h001",
+            "userId": "u001",
+            "date": "2025-10-21",
+            "completed": true
+        },
+        {
+            "id": "e003",
+            "habitId": "h002",
+            "userId": "u001",
+            "date": "2025-10-20",
+            "completed": false
+        },
+        {
+            "id": "e004",
+            "habitId": "h002",
+            "userId": "u001",
+            "date": "2025-10-21",
+            "completed": true
+        },
+        {
+            "id": "e005",
+            "habitId": "h003",
+            "userId": "u002",
+            "date": "2025-10-20",
+            "completed": true
+        },
+        {
+            "id": "e006",
+            "habitId": "h003",
+            "userId": "u002",
+            "date": "2025-10-21",
+            "completed": false
+        },
+        {
+            "id": "e007",
+            "habitId": "h004",
+            "userId": "u002",
+            "date": "2025-10-20",
+            "completed": true
+        },
+        {
+            "id": "e008",
+            "habitId": "h004",
+            "userId": "u002",
+            "date": "2025-10-21",
+            "completed": true
+        }
+    ],
+    "reminders": [
+        {
+            "id": "r001",
+            "userId": "u001",
+            "habitId": "h001",
+            "time": "08:00",
+            "timezone": "UTC",
+            "days": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+            "message": "Time to drink water",
+            "enabled": true
+        },
+        {
+            "id": "r002",
+            "userId": "u002",
+            "habitId": "h004",
+            "time": "21:00",
+            "timezone": "UTC",
+            "days": ["Mon", "Tue", "Wed", "Thu", "Fri"],
+            "message": "Wind down with 15 pages",
+            "enabled": true
+        }
+    ],
+    "badges": [
+        {
+            "id": "b001",
+            "userId": "u001",
+            "name": "Hydration Starter",
+            "description": "Completed Drink Water 3 days",
+            "earnedAt": "2025-10-21T08:30:00Z"
+        },
+        {
+            "id": "b002",
+            "userId": "u002",
+            "name": "Early Reader",
+            "description": "Read consistently for 3 days",
+            "earnedAt": "2025-10-21T21:15:00Z"
+        }
+    ]
+}

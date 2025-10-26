@@ -1,0 +1,13 @@
+fastapi
+uvicorn
+sqlalchemy
+alembic
+pydantic
+python-dotenv
+apscheduler
+httpx
+pytest
+pandas
+scikit-learn
+joblib
+numpy

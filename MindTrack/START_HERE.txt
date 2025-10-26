@@ -1,0 +1,75 @@
+╔══════════════════════════════════════════════════════════════╗
+║          🧠 MindTrack - HOW TO START THE APP                ║
+╚══════════════════════════════════════════════════════════════╝
+
+IMPORTANT: You MUST run both backend and frontend for the app to work!
+
+═══════════════════════════════════════════════════════════════
+
+📌 STEP 1: Start Backend (Terminal/Anaconda Prompt)
+═══════════════════════════════════════════════════════════════
+
+Open Anaconda Prompt and run:
+
+    cd C:\Users\USER\Downloads\MindTrack2\MindTrack\backend
+    
+    uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+
+✅ You should see: "Application startup complete. Uvicorn running on http://0.0.0.0:8000"
+
+
+═══════════════════════════════════════════════════════════════
+
+📌 STEP 2: Start Frontend (NEW Anaconda Prompt)
+═══════════════════════════════════════════════════════════════
+
+Open a SECOND Anaconda Prompt and run:
+
+    cd C:\Users\USER\Downloads\MindTrack2\MindTrack\frontend
+    
+    streamlit run MindTracker_frontend/app.py
+
+✅ You should see: "You can now view your Streamlit app at: http://localhost:8501"
+
+
+═══════════════════════════════════════════════════════════════
+
+🔗 ACCESS THE APP:
+═══════════════════════════════════════════════════════════════
+
+Backend API:  http://localhost:8000
+API Docs:     http://localhost:8000/docs
+Frontend:     http://localhost:8501  ← Use this URL!
+
+
+═══════════════════════════════════════════════════════════════
+
+⚠️  WHY PAGES DON'T WORK:
+═══════════════════════════════════════════════════════════════
+
+If you see the Streamlit interface but buttons don't work:
+→ You're ONLY running frontend (Streamlit alone)
+→ You MUST run the backend server first!
+→ Without backend, no data can be saved or retrieved
+→ Pages will show errors like "API not available" or "backend not connected"
+
+
+═══════════════════════════════════════════════════════════════
+
+✅ WHAT TO EXPECT:
+═══════════════════════════════════════════════════════════════
+
+1. Home page loads
+2. Click "Create Demo User" → Creates user in database
+3. Select habits → Saves to session
+4. Go to Dashboard → Track your habits
+5. Data saves to database (not just session state!)
+6. Streaks and badges work
+7. Insights fetch real data
+
+
+═══════════════════════════════════════════════════════════════
+
+💡 TIP: Run both commands in separate Anaconda Prompts!
+═══════════════════════════════════════════════════════════════
+
